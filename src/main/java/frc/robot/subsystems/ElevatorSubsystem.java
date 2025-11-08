@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
-import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
@@ -40,8 +39,8 @@ public class ElevatorSubsystem extends SubsystemBase {
     private double targetPosition;
 
   public ElevatorSubsystem() {
-    m_elevatorRight = new SparkMax(ElevatorConstants.k_rightElevatorMotorID, MotorType.kBrushless);
-    m_elevatorLeft = new SparkMax(ElevatorConstants.k_leftElevatorMotorID, MotorType.kBrushless);
+    m_elevatorRight = new SparkMax(IDs.ElevatorConstants.k_rightElevatorMotorID, MotorType.kBrushless);
+    m_elevatorLeft = new SparkMax(IDs.ElevatorConstants.k_leftElevatorMotorID, MotorType.kBrushless);
     m_elevatorRight.configure(Configs.Elevator.elevatorConfigRight, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     m_elevatorLeft.configure(Configs.Elevator.elevatorConfigLeft, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     m_elevatorRightController = m_elevatorRight.getClosedLoopController();
@@ -120,7 +119,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     m_elevatorLeftEncoder.setPosition(0);
   }
 
-  private void stopMotors()
+  public void stopMotors()
   {
     m_elevatorRight.stopMotor();
     m_elevatorLeft.stopMotor();
@@ -136,5 +135,9 @@ public class ElevatorSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Actual Elevator Left Position: ", m_elevatorLeftEncoder.getPosition());
     SmartDashboard.putBoolean("Top Limit Switch: ", !m_topLimitSwitch.get()); // when pressed, returns true
     SmartDashboard.putBoolean("Bottom Limit Switch: ", !m_bottomLimitSwitch.get()); // when pressed, returns true
+  }
+
+  public void testDrive(double speed){
+    m_elevatorRight.set(speed);
   }
 }

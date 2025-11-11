@@ -29,7 +29,6 @@ public class Configs {
                 .voltageCompensation(12);
             elevatorConfigLeft.closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
-                // Set PID values for position control - Edit
                 .p(0.1)
                 .outputRange(-1, 1)
                 .maxMotion

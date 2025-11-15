@@ -10,6 +10,9 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem.Setpoint;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj.Joystick; // for the joystick itself
+import edu.wpi.first.wpilibj2.command.RunCommand; // for inline commands
+import edu.wpi.first.wpilibj2.command.button.JoystickButton; // for joystick buttons
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -28,6 +31,8 @@ public class RobotContainer {
   
   private final CommandXboxController m_driver2Controller =
       new CommandXboxController(OI.Constants.k_driver2ControllerPort);
+
+  private final Joystick m_LA3 = new Joystick(OI.Constants.k_LA3);
   
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -53,22 +58,47 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Bind D-Pad Up to a command
+
+    new Trigger(() -> m_driver1Controller.getHID().getPOV() == 0)
+        .onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level1));
+
     new Trigger(() -> m_driver2Controller.getHID().getPOV() == 0)
         .onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level1));
+
+    new JoystickButton(m_LA3, 6).onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level1));
 
     // Bind D-Pad Right to a command
     new Trigger(() -> m_driver1Controller.getHID().getPOV() == 90)
         .onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level2));
 
+    new Trigger(() -> m_driver2Controller.getHID().getPOV() == 90)
+        .onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level2));
+
+    new JoystickButton(m_LA3, 7).onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level1));
+
+    new Trigger(() -> m_driver1Controller.getHID().getPOV() == 180)
+        .onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level2));
+    
     // Bind D-Pad Down to a command
     new Trigger(() -> m_driver2Controller.getHID().getPOV() == 180)
         .onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level3));
 
+    new JoystickButton(m_LA3, 8).onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level1));
+
     // Bind D-Pad Left to a command
-    new Trigger(() -> m_driver1Controller.getHID().getPOV() == 270)
-        .onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level4));
+    m_driver1Controller.leftBumper().onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level4));
+
+    m_driver2Controller.leftBumper().onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level4));
+
+    new JoystickButton(m_LA3, 9).onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level1));
+
+    m_driver1Controller.rightBumper().onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_feeder));
       
     m_driver2Controller.rightBumper().onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_feeder));
+
+    new JoystickButton(m_LA3, 10).onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level1));
+
+    // new JoystickButton()
   }
 
   /**

@@ -11,6 +11,7 @@ import frc.robot.subsystems.ElevatorSubsystem.Setpoint;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj.Joystick; // for the joystick itself
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand; // for inline commands
 import edu.wpi.first.wpilibj2.command.button.JoystickButton; // for joystick buttons
 
@@ -56,49 +57,106 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
+
+  private boolean inputLock = false;
+
   private void configureBindings() {
     // Bind D-Pad Up to a command
 
-    new Trigger(() -> m_driver1Controller.getHID().getPOV() == 0)
-        .onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level1));
+    new Trigger(() -> m_driver1Controller.getHID().getPOV() == 0 && !inputLock)
+        .onTrue(new InstantCommand(() -> {
+          inputLock = true;
+          elevatorSubsystem.setSetpointCommand(Setpoint.k_level1).schedule();
+      }));
+    
+    new Trigger(() -> m_driver2Controller.getHID().getPOV() == 0 && !inputLock)
+        .onTrue(new InstantCommand(() -> {
+          inputLock = true;
+          elevatorSubsystem.setSetpointCommand(Setpoint.k_level1).schedule();
+      }));
 
-    new Trigger(() -> m_driver2Controller.getHID().getPOV() == 0)
-        .onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level1));
-
-    new JoystickButton(m_LA3, 6).onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level1));
+    new JoystickButton(m_LA3, 6)
+        .onTrue(new InstantCommand(() -> {
+          if (!inputLock) {
+            inputLock = true;
+            elevatorSubsystem.setSetpointCommand(Setpoint.k_level1).schedule();
+          }
+      }));
 
     // Bind D-Pad Right to a command
-    new Trigger(() -> m_driver1Controller.getHID().getPOV() == 90)
-        .onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level2));
+    new Trigger(() -> m_driver1Controller.getHID().getPOV() == 90 && !inputLock)
+        .onTrue(new InstantCommand(() -> {
+          inputLock = true;
+          elevatorSubsystem.setSetpointCommand(Setpoint.k_level2).schedule();
+      }));
 
-    new Trigger(() -> m_driver2Controller.getHID().getPOV() == 90)
-        .onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level2));
+    new Trigger(() -> m_driver2Controller.getHID().getPOV() == 90 && !inputLock)
+        .onTrue(new InstantCommand(() -> {
+          inputLock = true;
+          elevatorSubsystem.setSetpointCommand(Setpoint.k_level2).schedule();
+      }));
 
-    new JoystickButton(m_LA3, 7).onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level1));
+    new JoystickButton(m_LA3, 7)
+        .onTrue(new InstantCommand(() -> {
+          if (!inputLock) {
+            inputLock = true;
+            elevatorSubsystem.setSetpointCommand(Setpoint.k_level2).schedule();
+          }
+      }));
 
-    new Trigger(() -> m_driver1Controller.getHID().getPOV() == 180)
-        .onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level2));
+    new Trigger(() -> m_driver1Controller.getHID().getPOV() == 180 && !inputLock)
+        .onTrue(new InstantCommand(() -> {
+          inputLock = true;
+          elevatorSubsystem.setSetpointCommand(Setpoint.k_level3).schedule();
+      }));
     
     // Bind D-Pad Down to a command
-    new Trigger(() -> m_driver2Controller.getHID().getPOV() == 180)
-        .onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level3));
+    new Trigger(() -> m_driver2Controller.getHID().getPOV() == 180 && !inputLock)
+        .onTrue(new InstantCommand(() -> {
+          inputLock = true;
+          elevatorSubsystem.setSetpointCommand(Setpoint.k_level3).schedule();
+      }));
 
-    new JoystickButton(m_LA3, 8).onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level1));
+    new JoystickButton(m_LA3, 8)
+        .onTrue(new InstantCommand(() -> {
+          if (!inputLock) {
+            inputLock = true;
+            elevatorSubsystem.setSetpointCommand(Setpoint.k_level3).schedule();
+          }
+      }));
 
     // Bind D-Pad Left to a command
-    m_driver1Controller.leftBumper().onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level4));
+    if (!inputLock){
+        m_driver1Controller.leftBumper().onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level4));
+    }
 
-    m_driver2Controller.leftBumper().onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level4));
+    if (!inputLock){
+        m_driver2Controller.leftBumper().onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level4));
+    }
 
-    new JoystickButton(m_LA3, 9).onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level1));
+    new JoystickButton(m_LA3, 9)
+        .onTrue(new InstantCommand(() -> {
+          if (!inputLock) {
+            inputLock = true;
+            elevatorSubsystem.setSetpointCommand(Setpoint.k_level4).schedule();
+          }
+      }));
 
-    m_driver1Controller.rightBumper().onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_feeder));
-      
-    m_driver2Controller.rightBumper().onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_feeder));
+    if (!inputLock){
+        m_driver1Controller.rightBumper().onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_feeder));
+    }
 
-    new JoystickButton(m_LA3, 10).onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level1));
+    if (!inputLock){
+        m_driver2Controller.rightBumper().onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_feeder));
+    }
 
-    // new JoystickButton()
+    new JoystickButton(m_LA3, 10)
+        .onTrue(new InstantCommand(() -> {
+          if (!inputLock) {
+            inputLock = true;
+            elevatorSubsystem.setSetpointCommand(Setpoint.k_feeder).schedule();
+          }
+      }));
   }
 
   /**

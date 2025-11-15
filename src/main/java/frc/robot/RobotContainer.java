@@ -23,8 +23,11 @@ public class RobotContainer {
   private ElevatorSubsystem elevatorSubsystem;
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OI.Constants.k_driverControllerPort); // make OI constants
+  private final CommandXboxController m_driver1Controller =
+      new CommandXboxController(OI.Constants.k_driver1ControllerPort);
+  
+  private final CommandXboxController m_driver2Controller =
+      new CommandXboxController(OI.Constants.k_driver2ControllerPort);
   
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -49,12 +52,23 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-      // Main controller scheme
-      m_driverController.y().onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_feeder));
-      m_driverController.x().onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level1));
-      m_driverController.b().onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level2));
-      m_driverController.a().onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level3));
-      m_driverController.rightBumper().onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level4));
+    // Bind D-Pad Up to a command
+    new Trigger(() -> m_driver2Controller.getHID().getPOV() == 0)
+        .onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level1));
+
+    // Bind D-Pad Right to a command
+    new Trigger(() -> m_driver1Controller.getHID().getPOV() == 90)
+        .onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level2));
+
+    // Bind D-Pad Down to a command
+    new Trigger(() -> m_driver2Controller.getHID().getPOV() == 180)
+        .onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level3));
+
+    // Bind D-Pad Left to a command
+    new Trigger(() -> m_driver1Controller.getHID().getPOV() == 270)
+        .onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level4));
+      
+    m_driver2Controller.rightBumper().onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_feeder));
   }
 
   /**

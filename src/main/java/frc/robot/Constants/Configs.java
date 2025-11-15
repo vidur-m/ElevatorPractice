@@ -17,7 +17,7 @@ public class Configs {
             elevatorConfigRight.closedLoop
                 .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
                 .p(0.1)
-                .outputRange(-1.0, 1.0)
+                .outputRange(-1, 1)
                 .maxMotion
                 .maxVelocity(4200)
                 .maxAcceleration(6000)

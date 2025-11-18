@@ -10,6 +10,7 @@ import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem.Setpoint;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick; // for the joystick itself
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand; // for inline commands
@@ -30,10 +31,10 @@ public class RobotContainer {
   private final CommandXboxController m_driver1Controller =
       new CommandXboxController(OI.Constants.k_driver1ControllerPort);
   
-  private final CommandXboxController m_driver2Controller =
-      new CommandXboxController(OI.Constants.k_driver2ControllerPort);
+  private final GenericHID m_driver2Controller =
+      new GenericHID(OI.Constants.k_driver2ControllerPort);
 
-  private final Joystick m_LA3 = new Joystick(OI.Constants.k_LA3);
+  private final Joystick m_LA3 = new Joystick(OI.Constants.k_LA3Port);
   
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -63,100 +64,135 @@ public class RobotContainer {
   private void configureBindings() {
     // Bind D-Pad Up to a command
 
-    new Trigger(() -> m_driver1Controller.getHID().getPOV() == 0 && !inputLock)
+    new Trigger(() -> m_driver1Controller.getHID().getPOV() == 0 && !inputLock) //xbox
         .onTrue(new InstantCommand(() -> {
           inputLock = true;
           elevatorSubsystem.setSetpointCommand(Setpoint.k_level1).schedule();
-      }));
+      }).andThen(() -> inputLock = false));
     
-    new Trigger(() -> m_driver2Controller.getHID().getPOV() == 0 && !inputLock)
+    new Trigger(() -> m_driver2Controller.getPOV() == 0 && !inputLock) //8bitdo
         .onTrue(new InstantCommand(() -> {
           inputLock = true;
           elevatorSubsystem.setSetpointCommand(Setpoint.k_level1).schedule();
-      }));
+      }).andThen(() -> inputLock = false));
 
-    new JoystickButton(m_LA3, 6)
+    new JoystickButton(m_LA3, 6) //LA3
         .onTrue(new InstantCommand(() -> {
           if (!inputLock) {
             inputLock = true;
             elevatorSubsystem.setSetpointCommand(Setpoint.k_level1).schedule();
           }
-      }));
+      }).andThen(() -> inputLock = false));
+
+
+
+
 
     // Bind D-Pad Right to a command
-    new Trigger(() -> m_driver1Controller.getHID().getPOV() == 90 && !inputLock)
+    new Trigger(() -> m_driver1Controller.getHID().getPOV() == 90 && !inputLock) //xbox
         .onTrue(new InstantCommand(() -> {
           inputLock = true;
           elevatorSubsystem.setSetpointCommand(Setpoint.k_level2).schedule();
-      }));
+      }).andThen(() -> inputLock = false));
 
-    new Trigger(() -> m_driver2Controller.getHID().getPOV() == 90 && !inputLock)
+    new Trigger(() -> m_driver2Controller.getPOV() == 90 && !inputLock) //8bitdo
         .onTrue(new InstantCommand(() -> {
           inputLock = true;
           elevatorSubsystem.setSetpointCommand(Setpoint.k_level2).schedule();
-      }));
+      }).andThen(() -> inputLock = false));
 
-    new JoystickButton(m_LA3, 7)
+    new JoystickButton(m_LA3, 7) //LA3
         .onTrue(new InstantCommand(() -> {
           if (!inputLock) {
             inputLock = true;
             elevatorSubsystem.setSetpointCommand(Setpoint.k_level2).schedule();
           }
-      }));
+      }).andThen(() -> inputLock = false));
 
-    new Trigger(() -> m_driver1Controller.getHID().getPOV() == 180 && !inputLock)
+
+
+
+
+
+    new Trigger(() -> m_driver1Controller.getHID().getPOV() == 180 && !inputLock) //xbox
         .onTrue(new InstantCommand(() -> {
           inputLock = true;
           elevatorSubsystem.setSetpointCommand(Setpoint.k_level3).schedule();
-      }));
+      }).andThen(() -> inputLock = false));
     
     // Bind D-Pad Down to a command
-    new Trigger(() -> m_driver2Controller.getHID().getPOV() == 180 && !inputLock)
+    new Trigger(() -> m_driver2Controller.getPOV() == 180 && !inputLock) //8bitdo
         .onTrue(new InstantCommand(() -> {
           inputLock = true;
           elevatorSubsystem.setSetpointCommand(Setpoint.k_level3).schedule();
-      }));
+      }).andThen(() -> inputLock = false));
 
-    new JoystickButton(m_LA3, 8)
+    new JoystickButton(m_LA3, 8) //LA3
         .onTrue(new InstantCommand(() -> {
           if (!inputLock) {
             inputLock = true;
             elevatorSubsystem.setSetpointCommand(Setpoint.k_level3).schedule();
           }
-      }));
+      }).andThen(() -> inputLock = false));
+
+
+
+
+
 
     // Bind D-Pad Left to a command
-    if (!inputLock){
-        m_driver1Controller.leftBumper().onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level4));
-    }
+    m_driver1Controller.leftBumper() //xbox
+    .onTrue(new InstantCommand(() -> {
+        if (!inputLock) {
+            inputLock = true;
+            elevatorSubsystem.setSetpointCommand(Setpoint.k_level4).schedule();
+        }
+    }).andThen(() -> inputLock = false));
 
-    if (!inputLock){
-        m_driver2Controller.leftBumper().onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_level4));
-    }
+    new JoystickButton(m_driver2Controller, 5) //8bitdo
+      .onTrue(new InstantCommand(() -> {
+          if (!inputLock) {
+              inputLock = true;
+              elevatorSubsystem.setSetpointCommand(Setpoint.k_level4).schedule();
+          }
+      }).andThen(() -> inputLock = false));
 
-    new JoystickButton(m_LA3, 9)
+    new JoystickButton(m_LA3, 9) //LA3
         .onTrue(new InstantCommand(() -> {
           if (!inputLock) {
             inputLock = true;
             elevatorSubsystem.setSetpointCommand(Setpoint.k_level4).schedule();
           }
-      }));
+      }).andThen(() -> inputLock = false));
 
-    if (!inputLock){
-        m_driver1Controller.rightBumper().onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_feeder));
-    }
 
-    if (!inputLock){
-        m_driver2Controller.rightBumper().onTrue(elevatorSubsystem.setSetpointCommand(Setpoint.k_feeder));
-    }
 
-    new JoystickButton(m_LA3, 10)
+
+
+
+      m_driver1Controller.rightBumper() //xbox
+      .onTrue(new InstantCommand(() -> {
+          if (!inputLock) {
+              inputLock = true;
+              elevatorSubsystem.setSetpointCommand(Setpoint.k_feeder).schedule();
+          }
+      }).andThen(() -> inputLock = false));
+
+      new JoystickButton(m_driver2Controller, 6) //8bitdo
+        .onTrue(new InstantCommand(() -> {
+            if (!inputLock) {
+                inputLock = true;
+                elevatorSubsystem.setSetpointCommand(Setpoint.k_feeder).schedule();
+            }
+        }).andThen(() -> inputLock = false));
+
+    new JoystickButton(m_LA3, 10) //LA3
         .onTrue(new InstantCommand(() -> {
           if (!inputLock) {
             inputLock = true;
             elevatorSubsystem.setSetpointCommand(Setpoint.k_feeder).schedule();
           }
-      }));
+      }).andThen(() -> inputLock = false));
   }
 
   /**

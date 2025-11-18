@@ -68,13 +68,13 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> {
           inputLock = true;
           elevatorSubsystem.setSetpointCommand(Setpoint.k_level1).schedule();
-      }).andThen(() -> inputLock = false));
+      }).finallyDo(() -> inputLock = false));
     
     new Trigger(() -> m_driver2Controller.getPOV() == 0 && !inputLock) //8bitdo
         .onTrue(new InstantCommand(() -> {
           inputLock = true;
           elevatorSubsystem.setSetpointCommand(Setpoint.k_level1).schedule();
-      }).andThen(() -> inputLock = false));
+      }).finallyDo(() -> inputLock = false));
 
     new JoystickButton(m_LA3, 6) //LA3
         .onTrue(new InstantCommand(() -> {
@@ -82,7 +82,7 @@ public class RobotContainer {
             inputLock = true;
             elevatorSubsystem.setSetpointCommand(Setpoint.k_level1).schedule();
           }
-      }).andThen(() -> inputLock = false));
+      }).finallyDo(() -> inputLock = false));
 
 
 
@@ -93,13 +93,13 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> {
           inputLock = true;
           elevatorSubsystem.setSetpointCommand(Setpoint.k_level2).schedule();
-      }).andThen(() -> inputLock = false));
+      }).finallyDo(() -> inputLock = false));
 
     new Trigger(() -> m_driver2Controller.getPOV() == 90 && !inputLock) //8bitdo
         .onTrue(new InstantCommand(() -> {
           inputLock = true;
           elevatorSubsystem.setSetpointCommand(Setpoint.k_level2).schedule();
-      }).andThen(() -> inputLock = false));
+      }).finallyDo(() -> inputLock = false));
 
     new JoystickButton(m_LA3, 7) //LA3
         .onTrue(new InstantCommand(() -> {
@@ -107,7 +107,7 @@ public class RobotContainer {
             inputLock = true;
             elevatorSubsystem.setSetpointCommand(Setpoint.k_level2).schedule();
           }
-      }).andThen(() -> inputLock = false));
+      }).finallyDo(() -> inputLock = false));
 
 
 
@@ -118,14 +118,14 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> {
           inputLock = true;
           elevatorSubsystem.setSetpointCommand(Setpoint.k_level3).schedule();
-      }).andThen(() -> inputLock = false));
+      }).finallyDo(() -> inputLock = false));
     
     // Bind D-Pad Down to a command
     new Trigger(() -> m_driver2Controller.getPOV() == 180 && !inputLock) //8bitdo
         .onTrue(new InstantCommand(() -> {
           inputLock = true;
           elevatorSubsystem.setSetpointCommand(Setpoint.k_level3).schedule();
-      }).andThen(() -> inputLock = false));
+      }).finallyDo(() -> inputLock = false));
 
     new JoystickButton(m_LA3, 8) //LA3
         .onTrue(new InstantCommand(() -> {
@@ -133,7 +133,7 @@ public class RobotContainer {
             inputLock = true;
             elevatorSubsystem.setSetpointCommand(Setpoint.k_level3).schedule();
           }
-      }).andThen(() -> inputLock = false));
+      }).finallyDo(() -> inputLock = false));
 
 
 
@@ -147,7 +147,7 @@ public class RobotContainer {
             inputLock = true;
             elevatorSubsystem.setSetpointCommand(Setpoint.k_level4).schedule();
         }
-    }).andThen(() -> inputLock = false));
+    }).finallyDo(() -> inputLock = false));
 
     new JoystickButton(m_driver2Controller, 5) //8bitdo
       .onTrue(new InstantCommand(() -> {
@@ -155,7 +155,7 @@ public class RobotContainer {
               inputLock = true;
               elevatorSubsystem.setSetpointCommand(Setpoint.k_level4).schedule();
           }
-      }).andThen(() -> inputLock = false));
+      }).finallyDo(() -> inputLock = false));
 
     new JoystickButton(m_LA3, 9) //LA3
         .onTrue(new InstantCommand(() -> {
@@ -163,7 +163,7 @@ public class RobotContainer {
             inputLock = true;
             elevatorSubsystem.setSetpointCommand(Setpoint.k_level4).schedule();
           }
-      }).andThen(() -> inputLock = false));
+      }).finallyDo(() -> inputLock = false));
 
 
 
@@ -176,7 +176,7 @@ public class RobotContainer {
               inputLock = true;
               elevatorSubsystem.setSetpointCommand(Setpoint.k_feeder).schedule();
           }
-      }).andThen(() -> inputLock = false));
+      }).finallyDo(() -> inputLock = false));
 
       new JoystickButton(m_driver2Controller, 6) //8bitdo
         .onTrue(new InstantCommand(() -> {
@@ -184,7 +184,7 @@ public class RobotContainer {
                 inputLock = true;
                 elevatorSubsystem.setSetpointCommand(Setpoint.k_feeder).schedule();
             }
-        }).andThen(() -> inputLock = false));
+        }).finallyDo(() -> inputLock = false));
 
     new JoystickButton(m_LA3, 10) //LA3
         .onTrue(new InstantCommand(() -> {
@@ -192,7 +192,7 @@ public class RobotContainer {
             inputLock = true;
             elevatorSubsystem.setSetpointCommand(Setpoint.k_feeder).schedule();
           }
-      }).andThen(() -> inputLock = false));
+      }).finallyDo(() -> inputLock = false));
   }
 
   /**

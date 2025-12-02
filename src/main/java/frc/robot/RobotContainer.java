@@ -60,21 +60,27 @@ public class RobotContainer {
    * joysticks}.
    */
 
-  private boolean inputLock = false;
+  private boolean inputLock = false; // to ensure one command at a time
 
   private void configureBindings() {
 
     //Move elevator to level 1
     new Trigger(() -> m_driver1Controller.getHID().getPOV() == 0 && !inputLock) // Xbox
         .onTrue(
-            new InstantCommand(() -> inputLock = true)// Set the lock
+            new InstantCommand(() -> {
+                inputLock = true;
+                System.out.println("D-Pad Up Pressed - Level 1");
+            })// Set the lock
             .andThen(elevatorSubsystem.setSetpointCommand(Setpoint.k_level1)) // Run the actual command
             .finallyDo(() -> inputLock = false) // Release the lock
         );
     
     new Trigger(() -> m_driver2Controller.getPOV() == 0 && !inputLock) // 8bitdo
         .onTrue(
-            new InstantCommand(() -> inputLock = true)// Set the lock
+            new InstantCommand(() -> {
+                inputLock = true;
+                System.out.println("D-Pad Up Pressed - Level 1");
+            })// Set the lock
             .andThen(elevatorSubsystem.setSetpointCommand(Setpoint.k_level1)) // Run the actual command
             .finallyDo(() -> inputLock = false) // Release the lock
         );
@@ -92,14 +98,20 @@ public class RobotContainer {
     //Move elevator to level 2
     new Trigger(() -> m_driver1Controller.getHID().getPOV() == 90 && !inputLock) //xbox
         .onTrue(
-            new InstantCommand(() -> inputLock = true)
+            new InstantCommand(() -> {
+                inputLock = true;
+                System.out.println("D-Pad Right Pressed - Level 2");
+            })
             .andThen(elevatorSubsystem.setSetpointCommand(Setpoint.k_level2))
             .finallyDo(() -> inputLock = false)
         );
     
     new Trigger(() -> m_driver2Controller.getPOV() == 90 && !inputLock) //8bitdo
         .onTrue(
-            new InstantCommand(() -> inputLock = true)
+            new InstantCommand(() -> {
+            inputLock = true;
+            System.out.println("D-Pad Right Pressed - Level 2");
+            })
             .andThen(elevatorSubsystem.setSetpointCommand(Setpoint.k_level2))
             .finallyDo(() -> inputLock = false)
         );
@@ -118,7 +130,10 @@ public class RobotContainer {
     //Move elevator to level 3
     new Trigger(() -> m_driver1Controller.getHID().getPOV() == 180 && !inputLock) //xbox
         .onTrue(
-          new InstantCommand(() -> inputLock = true)
+          new InstantCommand(() -> {
+            inputLock = true;
+            System.out.println("D-Pad Down Pressed - Level 3");
+          })
           .andThen(elevatorSubsystem.setSetpointCommand(Setpoint.k_level3))
           .finallyDo(() -> inputLock = false)
         );
@@ -126,7 +141,10 @@ public class RobotContainer {
     // Bind D-Pad Down to a command
     new Trigger(() -> m_driver2Controller.getPOV() == 180 && !inputLock) //8bitdo
         .onTrue(
-          new InstantCommand(() -> inputLock = true)
+          new InstantCommand(() -> {
+          inputLock = true;
+          System.out.println("D-Pad Down Pressed - Level 3");
+          })
           .andThen(elevatorSubsystem.setSetpointCommand(Setpoint.k_level3))
           .finallyDo(() -> inputLock = false)
         );
@@ -146,14 +164,20 @@ public class RobotContainer {
     //Move elevator to level 4
     m_driver1Controller.leftBumper() //xbox
         .onTrue(
-            new InstantCommand(() -> inputLock = true)
+            new InstantCommand(() -> {
+                inputLock = true;
+                System.out.println("Left Bumper Pressed - Level 4");
+            })
             .andThen(elevatorSubsystem.setSetpointCommand(Setpoint.k_level4))
             .finallyDo(() -> inputLock = false)
         );
 
     new JoystickButton(m_driver2Controller, 5) //8bitdo
         .onTrue(
-            new InstantCommand(() -> inputLock = true)
+            new InstantCommand(() -> {
+                inputLock = true;
+                System.out.println("Button 5 Pressed - Level 4");
+            })
             .andThen(elevatorSubsystem.setSetpointCommand(Setpoint.k_level4))
             .finallyDo(() -> inputLock = false)
         );
@@ -172,14 +196,20 @@ public class RobotContainer {
     //Move elevator to feeder level
     m_driver1Controller.rightBumper() //xbox
         .onTrue(
-            new InstantCommand(() -> inputLock = true)
+            new InstantCommand(() -> {
+                inputLock = true;
+                System.out.println("Right Bumper Pressed - Feeder Level");
+            })
             .andThen(elevatorSubsystem.setSetpointCommand(Setpoint.k_feeder))
             .finallyDo(() -> inputLock = false)
         );
 
     new JoystickButton(m_driver2Controller, 6) //8bitdo
         .onTrue(
-            new InstantCommand(() -> inputLock = true)
+            new InstantCommand(() -> {
+                inputLock = true;
+                System.out.println("Button 6 Pressed - Feeder Level");
+            })
             .andThen(elevatorSubsystem.setSetpointCommand(Setpoint.k_feeder))
             .finallyDo(() -> inputLock = false)
         );

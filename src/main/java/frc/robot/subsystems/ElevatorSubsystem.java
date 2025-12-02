@@ -102,8 +102,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   {
     if (!m_topLimitSwitch.get() && !reset_By_TopLimitSwitch)
     {
-      m_elevatorRightEncoder.setPosition(18);
-      m_elevatorLeftEncoder.setPosition(18);
+      m_elevatorRightEncoder.setPosition(24);
+      m_elevatorLeftEncoder.setPosition(24);
       reset_By_TopLimitSwitch = true;
 
     }
